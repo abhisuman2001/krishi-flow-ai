@@ -28,6 +28,9 @@ import {
 import { AIClassification } from '@/lib/types';
 import { SUPPORTED_LANGUAGES, INDIAN_STATES, MAHARASHTRA_DISTRICTS } from '@/lib/mock-data';
 import { getSeverityClass, getCategoryIcon } from '@/lib/utils';
+import VoiceInput from '@/components/ai/VoiceInput';
+import DemoScenarios, { DemoScenario } from '@/components/ai/DemoScenarios';
+import AIConfidenceCards from '@/components/ai/AIConfidenceCards';
 
 // District lists per state — expand as needed; falls back to Maharashtra list
 const DISTRICTS_BY_STATE: Record<string, string[]> = {
@@ -74,6 +77,26 @@ export default function SubmitForm() {
       [field]: value,
       // Reset district when state changes so stale value isn't submitted
       ...(field === 'state' ? { district: '' } : {}),
+    }));
+  };
+
+  const handleDemoScenario = (scenario: DemoScenario) => {
+    setFormData({
+      farmerName: scenario.farmerName,
+      phone: '',
+      district: scenario.district,
+      state: scenario.state,
+      language: scenario.language,
+      crop: scenario.crop,
+      issue: scenario.issue,
+    });
+    setError('');
+  };
+
+  const handleVoiceTranscript = (text: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      issue: prev.issue ? `${prev.issue} ${text}` : text,
     }));
   };
 
@@ -176,6 +199,9 @@ export default function SubmitForm() {
   if (step === 'review' && classification) {
     return (
       <div className="space-y-6">
+        {/* AI Confidence Cards */}
+        <AIConfidenceCards classification={classification} />
+
         {/* AI Classification Result */}
         <div className="rounded-2xl border border-purple-500/20 bg-purple-500/5 p-6">
           <div className="flex items-center gap-2 mb-4">
@@ -265,7 +291,13 @@ export default function SubmitForm() {
 
   // Main form
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 sm:p-8 space-y-6">
+    <div className="space-y-6">
+      {/* Demo Scenarios */}
+      <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+        <DemoScenarios onSelect={handleDemoScenario} />
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 sm:p-8 space-y-6">
       {/* Personal Info */}
       <div>
         <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -382,9 +414,19 @@ export default function SubmitForm() {
           <FileText className="w-4 h-4" /> Issue Description
         </h3>
         <div>
-          <label className="block text-sm text-slate-400 mb-1.5">
-            Describe your problem in detail <span className="text-red-400">*</span>
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-sm text-slate-400">
+              Describe your problem in detail <span className="text-red-400">*</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-600">Voice input:</span>
+              <VoiceInput
+                onTranscript={handleVoiceTranscript}
+                language={formData.language}
+                size="sm"
+              />
+            </div>
+          </div>
           <Textarea
             placeholder="Describe the problem you are facing with your crop. Include symptoms, when it started, how much area is affected, etc."
             value={formData.issue}
@@ -415,6 +457,7 @@ export default function SubmitForm() {
       <p className="text-xs text-center text-slate-600">
         Your issue will be analyzed by Groq AI and assigned to the appropriate agriculture officer.
       </p>
+    </div>
     </div>
   );
 }

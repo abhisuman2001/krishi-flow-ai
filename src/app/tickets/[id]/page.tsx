@@ -11,6 +11,9 @@ import { Ticket } from '@/lib/types';
 import { connectDB } from '@/lib/db';
 import TicketModel from '@/lib/models/Ticket';
 import mongoose from 'mongoose';
+import AIResolutionSummary from '@/components/ai/AIResolutionSummary';
+import EscalationTimer from '@/components/ai/EscalationTimer';
+import AIConfidenceCards from '@/components/ai/AIConfidenceCards';
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -243,7 +246,41 @@ export default async function TicketDetailPage(props: PageProps) {
                 </div>
               </div>
             </div>
+
+            {/* Escalation Timer — only for non-resolved tickets */}
+            {ticket.status !== 'Resolved' && (
+              <EscalationTimer
+                createdAt={ticket.createdAt}
+                severity={ticket.severity}
+              />
+            )}
+
+            {/* AI Resolution Summary */}
+            <AIResolutionSummary
+              ticket={ticket}
+              summary={ticket.aiSummary}
+            />
           </div>
+        </div>
+
+        {/* AI Confidence Cards */}
+        <div className="mt-6 space-y-3">
+          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <Brain className="w-4 h-4 text-purple-400" />
+            AI Intelligence Report
+          </h2>
+          <AIConfidenceCards
+            classification={{
+              crop: ticket.crop,
+              issueCategory: ticket.category,
+              category: ticket.category,
+              severity: ticket.severity,
+              department: ticket.department ?? '',
+              suggestedAction: ticket.suggestedAction ?? '',
+              summary: ticket.aiSummary ?? '',
+              confidence: 0.88,
+            }}
+          />
         </div>
       </div>
     </div>

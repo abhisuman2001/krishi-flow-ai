@@ -9,7 +9,6 @@ import {
   MoreVertical,
   Check,
   CheckCheck,
-  Mic,
   Paperclip,
   Smile,
   ArrowLeft,
@@ -21,6 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SUPPORTED_LANGUAGES } from '@/lib/mock-data';
+import VoiceInput from '@/components/ai/VoiceInput';
 
 interface Message {
   id: string;
@@ -399,9 +399,16 @@ export default function WhatsAppDemo() {
             <Send className="w-5 h-5 text-white" />
           </button>
         ) : (
-          <button className="w-10 h-10 rounded-full bg-[#00a884] flex items-center justify-center hover:bg-[#00c49a] transition-colors">
-            <Mic className="w-5 h-5 text-white" />
-          </button>
+          <VoiceInput
+            onTranscript={(text) => {
+              setInput(text);
+              // Auto-send after voice input
+              setTimeout(() => sendMessage(text), 300);
+            }}
+            language={language}
+            size="md"
+            className="shrink-0"
+          />
         )}
       </div>
 

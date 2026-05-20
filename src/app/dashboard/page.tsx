@@ -8,6 +8,7 @@ import { Ticket as TicketType, AnalyticsData } from '@/lib/types';
 import { MOCK_ANALYTICS } from '@/lib/mock-data';
 import { connectDB } from '@/lib/db';
 import TicketModel from '@/lib/models/Ticket';
+import DashboardEnhancements from '@/components/dashboard/DashboardEnhancements';
 
 export const dynamic = 'force-dynamic';
 
@@ -263,6 +264,16 @@ export default async function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* AI Intelligence Center */}
+        <DashboardEnhancements
+          initialStats={{
+            totalTickets: analytics.totalTickets,
+            resolvedTickets: analytics.resolvedTickets,
+            escalatedCases: analytics.escalatedCases,
+            pendingTickets: analytics.pendingTickets,
+          }}
+        />
       </div>
     </div>
   );
