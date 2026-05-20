@@ -23,8 +23,8 @@ const navItems = [
   { href: '/', label: 'Home', icon: Leaf },
   { href: '/submit', label: 'Submit Issue', icon: MessageSquare },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/analytics', label: 'Analytics Pro', icon: BarChart3 },
   { href: '/tickets', label: 'Tickets', icon: Ticket },
-  { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/workflow', label: 'AI Workflow', icon: GitBranch },
   { href: '/whatsapp', label: 'WhatsApp Demo', icon: Smartphone },
 ];

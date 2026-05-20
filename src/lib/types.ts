@@ -15,6 +15,37 @@ export type EscalationPriority = 'Normal' | 'Urgent' | 'Critical';
 export type AIOperation = 'classify' | 'chat' | 'summarise' | 'suggest';
 export type AnalyticsPeriod = 'daily' | 'weekly' | 'monthly';
 
+// ─── AI Classification ────────────────────────────────────────────────────────
+
+/**
+ * Structured output returned by the AI classification service.
+ *
+ * `issueCategory` is the canonical field name exposed by POST /api/ai/classify.
+ * `category` mirrors `issueCategory` so all existing code that reads `.category`
+ * continues to work without changes.
+ */
+export interface ClassificationResult {
+  crop: string;
+  issueCategory: TicketCategory;
+  /** Mirror of issueCategory — kept for backward compatibility */
+  category: TicketCategory;
+  severity: TicketSeverity;
+  department: string;
+  suggestedAction: string;
+  /** One-sentence plain-language summary of the issue */
+  summary: string;
+  /** 0–1 model confidence score */
+  confidence: number;
+}
+
+/**
+ * Legacy alias — existing imports of AIClassification keep compiling.
+ * @deprecated Use ClassificationResult instead.
+ */
+export type AIClassification = ClassificationResult;
+
+// ─── Ticket ───────────────────────────────────────────────────────────────────
+
 export interface Ticket {
   _id: string;
   ticketId: string;
@@ -38,14 +69,7 @@ export interface Ticket {
   updatedAt: string;
 }
 
-export interface AIClassification {
-  crop: string;
-  category: TicketCategory;
-  severity: TicketSeverity;
-  department: string;
-  suggestedAction: string;
-  confidence: number;
-}
+// ─── AI Log ───────────────────────────────────────────────────────────────────
 
 export interface AILog {
   _id: string;
@@ -53,7 +77,7 @@ export interface AILog {
   operation: AIOperation;
   prompt: string;
   response: string;
-  classification?: AIClassification;
+  classification?: ClassificationResult;
   model: string;
   processingTimeMs: number;
   isMock: boolean;
@@ -61,6 +85,8 @@ export interface AILog {
   createdAt: string;
   updatedAt: string;
 }
+
+// ─── Escalation ───────────────────────────────────────────────────────────────
 
 export interface Escalation {
   _id: string;
@@ -77,6 +103,8 @@ export interface Escalation {
   updatedAt: string;
 }
 
+// ─── Analytics ────────────────────────────────────────────────────────────────
+
 export interface AnalyticsData {
   totalTickets: number;
   resolvedTickets: number;
@@ -89,6 +117,8 @@ export interface AnalyticsData {
   weeklyTrend: { day: string; tickets: number; resolved: number }[];
   monthlyTrend: { month: string; tickets: number; resolved: number; escalated: number }[];
 }
+
+// ─── Chat / Workflow ──────────────────────────────────────────────────────────
 
 export interface ChatMessage {
   id: string;

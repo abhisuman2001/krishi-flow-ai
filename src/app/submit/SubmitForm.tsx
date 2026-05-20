@@ -219,6 +219,13 @@ export default function SubmitForm() {
             <p className="text-xs text-green-400 mb-1 font-medium">💡 Suggested Action</p>
             <p className="text-sm text-slate-300">{classification.suggestedAction}</p>
           </div>
+
+          {classification.summary && (
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-xs text-slate-500 mb-1 font-medium">📋 AI Summary</p>
+              <p className="text-sm text-slate-300 italic">&ldquo;{classification.summary}&rdquo;</p>
+            </div>
+          )}
         </div>
 
         {/* Farmer Details Summary */}

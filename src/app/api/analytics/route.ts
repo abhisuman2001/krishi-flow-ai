@@ -18,6 +18,7 @@ export async function GET() {
     const [
       resolvedCount,
       escalatedCount,
+      pendingCount,
       categoryAgg,
       severityAgg,
       districtAgg,
@@ -27,6 +28,7 @@ export async function GET() {
     ] = await Promise.all([
       TicketModel.countDocuments({ status: 'Resolved' }),
       TicketModel.countDocuments({ status: 'Escalated' }),
+      TicketModel.countDocuments({ status: 'Pending' }),
 
       // Category breakdown
       TicketModel.aggregate([
@@ -140,7 +142,7 @@ export async function GET() {
       totalTickets: total,
       resolvedTickets: resolvedCount,
       escalatedCases: escalatedCount,
-      pendingTickets: total - resolvedCount - escalatedCount,
+      pendingTickets: pendingCount,
       avgResolutionTime: avgResolutionTime || 0,
 
       categoryBreakdown: categoryAgg.map((c) => ({

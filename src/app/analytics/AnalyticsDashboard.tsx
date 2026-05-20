@@ -85,8 +85,9 @@ export default function AnalyticsDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  const { totalTickets, resolvedTickets, escalatedCases, avgResolutionTime } = analytics;
-  const pendingTickets = totalTickets - resolvedTickets - escalatedCases;
+  const { totalTickets, resolvedTickets, escalatedCases, pendingTickets, avgResolutionTime } = analytics;
+  // "In Review" = everything that isn't Pending, Escalated, or Resolved
+  const inReviewTickets = Math.max(0, totalTickets - pendingTickets - escalatedCases - resolvedTickets);
 
   if (loading) {
     return (
@@ -304,7 +305,7 @@ export default function AnalyticsDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
           { label: 'Pending', value: pendingTickets, color: '#eab308', bg: 'bg-yellow-500/10 border-yellow-500/20' },
-          { label: 'In Review', value: Math.max(0, totalTickets - resolvedTickets - escalatedCases - pendingTickets), color: '#3b82f6', bg: 'bg-blue-500/10 border-blue-500/20' },
+          { label: 'In Review', value: inReviewTickets, color: '#3b82f6', bg: 'bg-blue-500/10 border-blue-500/20' },
           { label: 'Escalated', value: escalatedCases, color: '#ef4444', bg: 'bg-red-500/10 border-red-500/20' },
           { label: 'Resolved', value: resolvedTickets, color: '#22c55e', bg: 'bg-green-500/10 border-green-500/20' },
         ].map((item) => (
