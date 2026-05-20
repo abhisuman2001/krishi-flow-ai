@@ -33,7 +33,7 @@ export async function GET(
       return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ ticket: serialise(ticket as Record<string, unknown>) });
+    return NextResponse.json({ ticket: serialise(ticket as unknown as Record<string, unknown>) });
   } catch (error) {
     console.error('GET /api/tickets/[id] error:', error);
     return NextResponse.json({ error: 'Failed to fetch ticket' }, { status: 500 });
@@ -72,7 +72,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ ticket: serialise(ticket as Record<string, unknown>), success: true });
+    return NextResponse.json({ ticket: serialise(ticket as unknown as Record<string, unknown>), success: true });
   } catch (error) {
     console.error('PATCH /api/tickets/[id] error:', error);
     return NextResponse.json({ error: 'Failed to update ticket' }, { status: 500 });

@@ -79,7 +79,7 @@ const EscalationSchema = new Schema<IEscalation>(
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
-EscalationSchema.pre('save', function (next) {
+EscalationSchema.pre('save', function () {
   if (this.isModified('status')) {
     if (this.status === 'Acknowledged' && !this.acknowledgedAt) {
       this.acknowledgedAt = new Date();
@@ -88,7 +88,6 @@ EscalationSchema.pre('save', function (next) {
       this.resolvedAt = new Date();
     }
   }
-  next();
 });
 
 // ─── Indexes ─────────────────────────────────────────────────────────────────

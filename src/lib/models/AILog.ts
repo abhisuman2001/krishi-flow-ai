@@ -15,7 +15,7 @@ export interface IAIClassification {
   confidence: number;
 }
 
-export interface IAILog extends Document {
+export interface IAILog extends Omit<Document, 'model'> {
   /** References Ticket.ticketId — 'pending' until the ticket is saved */
   ticketId: string;
   operation: AIOperation;

@@ -221,9 +221,11 @@ export const MOCK_AI_LOGS: AILog[] = [
     classification: {
       crop: 'Tomato',
       category: 'Crop Disease',
+      issueCategory: 'Crop Disease',
       severity: 'High',
       department: 'Plant Protection',
       suggestedAction: 'Apply copper-based fungicide. Ensure proper drainage.',
+      summary: 'Tomato plants showing Early Blight symptoms with yellow leaves and brown spots.',
       confidence: 0.94,
     },
     model: 'llama-3.3-70b-versatile',
@@ -241,9 +243,11 @@ export const MOCK_AI_LOGS: AILog[] = [
     classification: {
       crop: 'Cotton',
       category: 'Pest Attack',
+      issueCategory: 'Pest Attack',
       severity: 'Critical',
       department: 'Pest Management',
       suggestedAction: 'Emergency pheromone trap deployment. Apply recommended insecticide.',
+      summary: 'Cotton crop severely attacked by pink bollworm with many bolls damaged.',
       confidence: 0.97,
     },
     model: 'llama-3.3-70b-versatile',

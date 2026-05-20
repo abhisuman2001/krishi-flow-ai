@@ -110,7 +110,7 @@ const UserSchema = new Schema<IUser>(
     timestamps: true,
     // Strip passwordHash from toJSON / toObject by default
     toJSON: {
-      transform(_doc, ret) {
+      transform(_doc, ret: Record<string, unknown>) {
         delete ret.passwordHash;
         return ret;
       },

@@ -134,14 +134,13 @@ const TicketSchema = new Schema<ITicket>(
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
 /** Auto-set resolvedAt and resolutionTimeMinutes when status changes to Resolved */
-TicketSchema.pre('save', function (next) {
+TicketSchema.pre('save', function () {
   if (this.isModified('status') && this.status === 'Resolved' && !this.resolvedAt) {
     this.resolvedAt = new Date();
     this.resolutionTimeMinutes = Math.round(
       (this.resolvedAt.getTime() - this.createdAt.getTime()) / 60000
     );
   }
-  next();
 });
 
 // ─── Indexes ─────────────────────────────────────────────────────────────────
